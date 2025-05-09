@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('author_id')->cascadeOnDelete();
             $table->unsignedBigInteger('category_id')->cascadeOnDelete();
             $table->unsignedBigInteger('publisher_id')->cascadeOnDelete();
+            $table->integer('published_year')->nullable();
             $table->timestamps();
         });
     }
