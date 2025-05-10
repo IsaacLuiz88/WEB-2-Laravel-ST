@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
 use App\Models\User;
+use Faker\Factory as FakerFactory;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,11 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        FakerFactory::create()->unique(true);
+        $this->call([CategorySeeder::class, AuthorPublisherBookSeeder::class]);
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
     }
 }
+//command laravel to drop tables
