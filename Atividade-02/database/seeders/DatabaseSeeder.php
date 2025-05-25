@@ -16,11 +16,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         FakerFactory::create()->unique(true);
-        $this->call([CategorySeeder::class, AuthorPublisherBookSeeder::class]);
+        $this->call([CategorySeeder::class, AuthorPublisherBookSeeder::class, UserBorrowingSeeder::class]);
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
     }
 }
-//command laravel to drop tables
+//command laravel to drop tables: 
