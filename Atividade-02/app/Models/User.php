@@ -23,6 +23,12 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function books(){
+        return $this->belongsToMany(Book::class, 'borrowings')
+            ->withPivot('borrowed_at', 'returned_at')
+            ->withTimestamps();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
