@@ -24,12 +24,12 @@ class PublisherController extends Controller
             'name' => 'required|string|unique:publishers|max:255',
         ]);
         Publisher::create($request->all());
-        return redirect()->route('publishers.index')-with('success', 'Publisher created successfully.');
+        return redirect()->route('publishers.index')->with('success', 'Publisher created successfully.');
     }
 
     public function show(Publisher $publisher)
     {
-         return view('publishers.show', compact('author'));
+         return view('publishers.show', compact('publisher'));
     }
 
     public function edit(Publisher $publisher)
@@ -40,10 +40,11 @@ class PublisherController extends Controller
     public function update(Request $request, Publisher $publisher)
     {
         $request->validate([
-            'name' => 'required|string|unique:publishers|max:255',
+            'name' => 'required|string|unique:categories,name,' . $publisher->id . '|max:255',
         ]);
-        Publisher::create($request->all());
-        return redirect()->route('publishers.index')-with('success', 'Publisher created successfully.');
+
+        $publisher->update($request->all());
+        return redirect()->route('publishers.index')->with('success', 'Publisher updated successfully.');
     }
 
     public function destroy(Publisher $publisher)

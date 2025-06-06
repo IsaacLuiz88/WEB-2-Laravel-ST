@@ -22,8 +22,11 @@ class AuthorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|unique:authors|max:255',
+            'birth_date' => 'nullable|date',
         ]);
-        Author::create($request->all());
+        
+        Author::create($request->only('name', 'birth_date'));
+
         return redirect()->route('authors.index')->with('success', 'Author created successfully.');
     }
 
@@ -41,9 +44,11 @@ class AuthorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|unique:authors,name,' . $author->id . '|max:255',
+            'birth_date' => 'nullable|date',
         ]);
 
-        $author->update($request->all());
+        $author->update($request->only('name', 'birth_date'));
+
         return redirect()->route('authors.index')->with('success', 'Author updated successfully.');
     }
 
