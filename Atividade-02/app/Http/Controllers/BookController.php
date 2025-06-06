@@ -13,8 +13,10 @@ class BookController extends Controller
 
     public function index()
     {
-        $books = Book::all();
-        return view('books.create-id', compact('books'));
+       /*  $books = Book::all();
+        return view('books.create-id', compact('books')); */
+        $books = Book::with('author')->paginate(20);
+        return view('books.index', compact('books'));
     }
 
     public function createWithId()
@@ -58,7 +60,7 @@ class BookController extends Controller
 
     public function show(Book $book)
     {
-        $book->load('author', 'category', 'publisher');
+        $book->load(['author', 'category', 'publisher']);
         return view('books.show', compact('book'));
     }
 
