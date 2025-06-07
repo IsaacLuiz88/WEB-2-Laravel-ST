@@ -4,8 +4,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BorrowingController;
 use App\Http\Controllers\UserController;
-use App\Models\Borrowing;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +29,6 @@ Route::post('/books/create-select', [BookController::class, 'storeWithSelect'])-
 Route::resource('books', BookController::class)->except(['create', 'store']);
 Route::resource('users', UserController::class)->except(['create', 'store', 'destroy']);
 
-Route::post('/borrow/{book}/borrow', [BookController::class, 'store'])->name('books.borrow');
-Route::get('/users/{user}/borrowings', [Borrowing::class, 'userBorrowings'])->name('users.borrowings');
-Route::patch('/borrowings/{borrowing}/return', [Borrowing::class, 'returnBook'])->name('borrowings.return');
+Route::post('/borrow/{book}/borrow', [BorrowingController::class, 'store'])->name('books.borrow');
+Route::get('/users/{user}/borrowings', [BorrowingController::class, 'userBorrowings'])->name('users.borrowings');
+Route::patch('/borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook'])->name('borrowings.return');

@@ -25,13 +25,13 @@ class BorrowingController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
-        Borrowing::create([
+        $borrowing = Borrowing::create([
             'user_id' => $request->input('user_id'),
             'book_id' => $book->id,
             'borrowed_at' => now(),
         ]);
 
-        return redirect()->route('books.show')->with('success', 'Borrowing created successfully.');
+        return redirect()->route('books.show', $borrowing->book_id)->with('success', 'Borrowing created successfully.');
     }
 
     public function returnBook(Borrowing $borrowing)
@@ -40,7 +40,7 @@ class BorrowingController extends Controller
             'returned_at' => now(),
         ]);
 
-        return redirect()->route('books.show')->with('success', 'Book returned successfully.');
+        return redirect()->route('books.show', $borrowing->book_id)->with('success', 'Book returned successfully.');
     }
 
     public function userBorrowings(User $user) {
