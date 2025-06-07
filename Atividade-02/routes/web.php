@@ -5,6 +5,7 @@ use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\UserController;
+use App\Models\Borrowing;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +27,8 @@ Route::get('/books/create-select', [BookController::class, 'createWithSelect'])-
 Route::post('/books/create-select', [BookController::class, 'storeWithSelect'])->name('books.store.select');
 // Rotas RESTful para index, show, edit, update, delete (tem que ficar depois das rotas /books/create-id-number e /books/create-select)
 Route::resource('books', BookController::class)->except(['create', 'store']);
-
 Route::resource('users', UserController::class)->except(['create', 'store', 'destroy']);
+
+Route::post('/borrow/{book}/borrow', [BookController::class, 'store'])->name('books.borrow');
+Route::get('/users/{user}/borrowings', [Borrowing::class, 'userBorrowings'])->name('users.borrowings');
+Route::patch('/borrowings/{borrowing}/return', [Borrowing::class, 'returnBook'])->name('borrowings.return');
