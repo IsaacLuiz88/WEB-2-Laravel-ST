@@ -22,7 +22,7 @@ class BookController extends Controller
 
     public function createWithId()
     {
-        return view('books.create');
+        return view('books.create-id');
     }
 
     public function storeWithId(Request $request)
