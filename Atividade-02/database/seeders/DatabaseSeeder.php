@@ -21,6 +21,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        User::factory()->create([
+            'name' => 'ii',
+            'email' => 'i@i.i',
+            'password' => 'iiiiiiii',
+        ]);
     }
 }
 //command laravel to drop tables: 

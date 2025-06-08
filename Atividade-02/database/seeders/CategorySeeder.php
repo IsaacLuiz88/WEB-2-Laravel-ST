@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Category;
 
 class CategorySeeder extends Seeder
 {
@@ -25,7 +26,7 @@ class CategorySeeder extends Seeder
             ['name' => 'Travel'],
         ];
         foreach ($categories as $category) {
-            \App\Models\Category::create($category);
+            Category::create($category);
         }
         //Command to run the seeder: php artisan db:seed --class=CategorySeeder
     }
