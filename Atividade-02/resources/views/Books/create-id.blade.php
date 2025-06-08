@@ -46,6 +46,14 @@
             @enderror
         </div>
 
+        <div class="mb-3">
+            <label for="cover_image" class="form-label">Imagem de Capa (opcional)</label>
+            <input type="file" class="form-control @error('cover_image') is-invalid @enderror" name="cover_image">
+            @error('cover_image')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
         <button type="submit" class="btn btn-success">Salvar</button>
     </form>
 </div>

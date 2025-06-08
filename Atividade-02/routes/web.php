@@ -32,3 +32,5 @@ Route::resource('users', UserController::class)->except(['create', 'store', 'des
 Route::post('/borrow/{book}/borrow', [BorrowingController::class, 'store'])->name('books.borrow');
 Route::get('/users/{user}/borrowings', [BorrowingController::class, 'userBorrowings'])->name('users.borrowings');
 Route::patch('/borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook'])->name('borrowings.return');
+
+Route::put('/books/{book}/cover', [BookController::class, 'updateCover'])->name('books.updateCover');

@@ -4,6 +4,8 @@
 <div class="container">
     <h1 class="my-4">Detalhes do Livro</h1>
 
+    <img src="{{ $book->cover_image ? asset('storage/' . $book->cover_image) : asset('images/default-cover.png') }}" alt="Capa" width="150">
+     
     <div class="card">
         <div class="card-header">
             <strong>Título:</strong> {{ $book->title }}
