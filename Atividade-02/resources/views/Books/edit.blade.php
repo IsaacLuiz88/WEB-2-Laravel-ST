@@ -12,7 +12,7 @@
             @if($book->cover_image)
                 <div class="mt-2">
                     <p>Imagem atual:</p>
-                    <img src="{{ asset('storage/' . $book->cover_image) }}" alt="Imagem atual" width="150">
+                    <img src="{{ asset('storage/' . $book->cover_image) }}" alt="Book Cover" width="150">
                 </div>
             @endif
 

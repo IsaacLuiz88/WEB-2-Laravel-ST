@@ -109,7 +109,7 @@ class BookController extends Controller
         // Salva a nova
         $data['cover_image'] = $request->file('cover_image')->store('covers', 'public');
     }
-        $book->update($request->all());
+        $book->update($data);
 
         return redirect()->route('books.index')->with('success', 'Book updated successfully.');
     }

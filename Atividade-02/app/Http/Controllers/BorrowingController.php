@@ -44,7 +44,7 @@ class BorrowingController extends Controller
     }
 
     public function userBorrowings(User $user) {
-        $borrowings = $user->books()->withPivot('borrowed_at, returned_at')->get();
+        $borrowings = $user->books()->withPivot('borrowed_at', 'returned_at')->get();
         return view('users.borrowings', compact('user', 'borrowings'));
     }
 
