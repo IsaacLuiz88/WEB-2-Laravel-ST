@@ -29,9 +29,9 @@
         <tbody>
             @forelse($books as $book)
                 <tr>
-                    <td>{{ $book->id }}</td>
-                    <td>{{ $book->title }}</td>
-                    <td>{{ $book->author->name }}</td>
+                    <td>{{ $book->id ?? 'ID Unknown' }}</td>
+                    <td>{{ $book->title ?? 'Title Unknown'}}</td>
+                    <td>{{ $book->author->name ?? 'Author Unknown'}}</td>
                     <td>
                         <!-- Botão de Visualizar -->
                         <a href="{{ route('books.show', $book->id) }}" class="btn btn-info btn-sm">

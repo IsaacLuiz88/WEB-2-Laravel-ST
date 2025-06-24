@@ -11,20 +11,32 @@
             <strong>Título:</strong> {{ $book->title }}
         </div>
         <div class="card-body">
-            <p><strong>Autor:</strong>
+            <p>
+                @if($book->author)
                 <a href="{{ route('authors.show', $book->author->id) }}">
                     {{ $book->author->name }}
                 </a>
+                @else
+                    Author Unknown
+                @endif
             </p>
             <p><strong>Editora:</strong>
+                @if($book->publisher)
                 <a href="{{ route('publishers.show', $book->publisher->id) }}">
                     {{ $book->publisher->name }}
                 </a>
+                @else
+                    Publisher Unknown
+                @endif
             </p>
             <p><strong>Categoria:</strong>
+                @if($book->category)
                 <a href="{{ route('categories.show', $book->category->id) }}">
                     {{ $book->category->name }}
                 </a>
+                @else
+                    Category Unknown
+                @endif
             </p>
         </div>
     </div>

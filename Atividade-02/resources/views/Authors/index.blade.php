@@ -27,8 +27,8 @@
             @forelse($authors as $author)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $author->name }}</td>
-                    <td>{{ $author->birth_date->format('d/m/Y') }}</td>
+                    <td>{{ $author->name ?? 'Name Unknown'}}</td>
+                    <td>{{ $author->birth_date->format('d/m/Y') ?? 'Birth Date Unknown' }}</td>
                     <td>
                         <a href="{{ route('authors.show', $author) }}" class="btn btn-info btn-sm">
                             <i class="bi bi-eye"></i> Visualizar
