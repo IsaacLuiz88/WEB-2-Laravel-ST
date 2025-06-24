@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use \App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -42,5 +44,26 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function editRole(User $user)
+    {
+        $this->authorize('updateRole', $user); // Verifica se o usuário logado pode editar o papel deste $user
+
+        $roles = ['admin', 'librarian', 'client']; // Papéis disponíveis
+        return view('users.edit_role', compact('user', 'roles'));
+    }
+
+    public function updateRole(Request $request, User $user)
+    {
+        $this->authorize('updateRole', $user); // Verifica novamente antes de atualizar
+
+        $request->validate([
+            'role' => ['required', 'string', Rule::in(['admin', 'librarian', 'client'])],
+        ]);
+
+        $user->update(['role' => $request->role]);
+
+        return redirect()->route('users.index')->with('success', 'User role updated successfully.');
     }
 }

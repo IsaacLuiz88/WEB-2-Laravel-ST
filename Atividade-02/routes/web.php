@@ -34,3 +34,6 @@ Route::get('/users/{user}/borrowings', [BorrowingController::class, 'userBorrowi
 Route::patch('/borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook'])->name('borrowings.return');
 
 Route::put('/books/{book}/cover', [BookController::class, 'updateCover'])->name('books.updateCover');
+
+Route::get('users/{user}/edit-role', [UserController::class, 'editRole'])->name('users.edit_role');
+Route::put('users/{user}/update-role', [UserController::class, 'updateRole'])->name('users.update_role');

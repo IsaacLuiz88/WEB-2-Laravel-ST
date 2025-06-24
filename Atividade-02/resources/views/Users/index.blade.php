@@ -26,6 +26,11 @@
                         <a href="{{ route('users.edit', $user) }}" class="btn btn-primary btn-sm">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
+                        @can('updateRole', $user) {{-- Verifica se o usuário logado pode editar o papel deste $user --}}
+                        <a href="{{ route('users.edit_role', $user->id) }}" class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i> Editar Papel
+                        </a>
+                        @endcan
                     </td>
                 </tr>
             @endforeach

@@ -12,22 +12,33 @@ use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
+    // Proteja o construtor para ações gerais
+    public function __construct()
+    {
+        $this->middleware('auth'); // Garante que o usuário esteja logado
+    }
 
     public function index()
     {
        /*  $books = Book::all();
         return view('books.create-id', compact('books')); */
+        $this->authorize('viewAny', Book::class); // Ou Gate::allows('viewAny', Book::class)
+
         $books = Book::with('author')->paginate(20);
         return view('books.index', compact('books'));
     }
 
     public function createWithId()
     {
+        $this->authorize('create', Book::class);
+
         return view('books.create-id');
     }
 
     public function storeWithId(Request $request)
     {
+        $this->authorize('create', Book::class);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'publisher_id' => 'required|exists:publishers,id',
@@ -47,6 +58,8 @@ class BookController extends Controller
 
     public function createWithSelect()
     {
+        $this->authorize('create', Book::class);
+
         $publishers = Publisher::all();
         $authors = Author::all();
         $categories = Category::all();
@@ -55,6 +68,8 @@ class BookController extends Controller
 
     public function storeWithSelect(Request $request)
     {
+        $this->authorize('create', Book::class);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'publisher_id' => 'required|exists:publishers,id',
@@ -74,6 +89,8 @@ class BookController extends Controller
 
     public function show(Book $book)
     {
+        $this->authorize('view', $book);
+
         $book->load(['author', 'category', 'publisher']);
         $users = User::all();
         return view('books.show', compact('book', 'users'));
@@ -81,6 +98,8 @@ class BookController extends Controller
 
     public function edit(Book $book)
     {
+        $this->authorize('update', $book);
+
         $publishers = Publisher::all();
         $authors = Author::all();
         $categories = Category::all();
@@ -90,6 +109,8 @@ class BookController extends Controller
 
     public function update(Request $request, Book $book)
     {
+        $this->authorize('update', $book);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'publisher_id' => 'required|exists:publishers,id',
@@ -115,6 +136,8 @@ class BookController extends Controller
     }
 
     public function updateCoverImage(Request $request, Book $book){
+        $this->authorize('update', $book);
+        
         $request->validate([
         'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',]);
 
@@ -131,6 +154,8 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
+        $this->authorize('delete', $book);
+
         if($book->cover_image && Storage::disk('public')->exists($book->cover_image)){
             Storage::disk('public')->delete($book->cover_image);
         }
