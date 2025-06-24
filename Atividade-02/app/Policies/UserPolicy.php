@@ -19,7 +19,7 @@ class UserPolicy
     public function viewAny(User $user): bool
     {
         // Customers, Librarians, and Admins can view the list.
-        return $user->isClient() || $user->isAdminOrLibrarian();
+        return $user->isAdminOrLibrarian();
     }
 
     /**
@@ -28,7 +28,7 @@ class UserPolicy
     public function view(User $user, User $model): bool
     {
         // Customers, Librarians, and Admins can view a specific item.
-        return $user->isClient() || $user->isAdminOrLibrarian();
+        return $user->isAdminOrLibrarian();
     }
 
     /**
@@ -39,12 +39,18 @@ class UserPolicy
         return $user->isAdminOrLibrarian();
     }
 
+    public function updateRole(User $user, User $model): bool
+    {
+        // Only Admins can update roles.
+        return $user->isAdmin() && $user->id !== $model->id;
+    }
+
     /**
      * Determine whether the user can update the model.
      */
     public function update(User $user, User $model): bool
     {
-        return $user->isAdminOrLibrarian();
+        return $user->isAdmin() || ($user->isLibrarian() && !$model->isAdmin()) || $user->id === $model->id;
     }
 
     /**
@@ -52,7 +58,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->isAdminOrLibrarian();
+        return $user->isAdmin() && $user->id !== $model->id;
     }
 
     /**
