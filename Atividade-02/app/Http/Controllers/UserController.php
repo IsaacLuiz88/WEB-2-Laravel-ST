@@ -8,6 +8,11 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
     public function index()
     {
         $users = User::paginate(10); // Paginação para 10 usuários por página

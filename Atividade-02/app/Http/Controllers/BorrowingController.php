@@ -9,6 +9,14 @@ use App\Models\Borrowing;
 
 class BorrowingController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('can:create,App\Models\Borrowing')->only(['create', 'store']);
+        $this->middleware('can:update,borrowing')->only(['returnBook']);
+        $this->middleware('can:view,user')->only(['userBorrowings']);
+    }
+    
     public function index()
     {
         //

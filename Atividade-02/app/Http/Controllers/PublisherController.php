@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class PublisherController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+    
     public function index()
     {
         $publishers = Publisher::all();
