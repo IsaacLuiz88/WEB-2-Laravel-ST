@@ -43,7 +43,7 @@ class UserController extends Controller
     {
         $user->update($request->only('name', 'email'));
 
-        return redirect()->route('users.index')->with('success', 'Usuário atualizado com sucesso.');
+        return redirect()->route('users.index')->with('success', 'User updated successfully.');
     }
 
     public function destroy(string $id)

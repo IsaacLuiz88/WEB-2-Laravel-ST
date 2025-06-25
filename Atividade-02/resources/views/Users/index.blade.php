@@ -23,9 +23,13 @@
                         <a href="{{ route('users.show', $user) }}" class="btn btn-info btn-sm">
                             <i class="bi bi-eye"></i> Visualizar
                         </a>
+                        @can('update', $user)
+                        {{-- Verifica se o usuário logado pode editar este $user --}}
                         <a href="{{ route('users.edit', $user) }}" class="btn btn-primary btn-sm">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
+                        @endcan
+                        
                         @can('updateRole', $user) {{-- Verifica se o usuário logado pode editar o papel deste $user --}}
                         <a href="{{ route('users.edit_role', $user->id) }}" class="btn btn-warning btn-sm">
                             <i class="bi bi-pencil-square"></i> Editar Papel

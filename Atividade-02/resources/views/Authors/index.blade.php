@@ -34,10 +34,13 @@
                             <i class="bi bi-eye"></i> Visualizar
                         </a>
 
+                        @can('update', $author)
                         <a href="{{ route('authors.edit', $author) }}" class="btn btn-primary btn-sm">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
+                        @endcan
 
+                        @can('delete', $author)
                         <form action="{{ route('authors.destroy', $author) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
@@ -45,6 +48,7 @@
                                 <i class="bi bi-trash"></i> Excluir
                             </button>
                         </form>
+                        @endcan
                     </td>
                 </tr>
             @empty

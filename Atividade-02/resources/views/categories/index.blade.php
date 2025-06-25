@@ -32,11 +32,14 @@
                             <i class="bi bi-eye"></i> Visualizar
                         </a>
 
+                        @can('update', $category)
                         <!-- Botão de Editar -->
                         <a href="{{ route('categories.edit', $category) }}" class="btn btn-primary btn-sm">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
+                        @endcan
 
+                        @can('delete', $category)
                         <!-- Botão de Excluir -->
                         <form action="{{ route('categories.destroy', $category) }}" method="POST" style="display: inline;">
                             @csrf
@@ -45,6 +48,7 @@
                                 <i class="bi bi-trash"></i> Excluir
                             </button>
                         </form>
+                        @endcan
                     </td>
                 </tr>
             @empty
