@@ -19,7 +19,8 @@ class UserPolicy
     public function viewAny(User $user): bool
     {
         // Customers, Librarians, and Admins can view the list.
-        return $user->isAdminOrLibrarian();
+        //return $user->isAdminOrLibrarian();
+        return true;
     }
 
     /**
@@ -28,7 +29,8 @@ class UserPolicy
     public function view(User $user, User $model): bool
     {
         // Customers, Librarians, and Admins can view a specific item.
-        return $user->isAdminOrLibrarian();
+        //return $user->isAdminOrLibrarian();
+        return true;
     }
 
     /**

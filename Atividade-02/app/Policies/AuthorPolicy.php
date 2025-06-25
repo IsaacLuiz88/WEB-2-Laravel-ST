@@ -13,7 +13,8 @@ class AuthorPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isClient() || $user->isAdminOrLibrarian();
+        //return $user->isClient() || $user->isAdminOrLibrarian();
+        return true;
     }
 
     /**
@@ -21,7 +22,8 @@ class AuthorPolicy
      */
     public function view(User $user, Author $author): bool
     {
-        return $user->isClient() || $user->isAdminOrLibrarian();
+        //return $user->isClient() || $user->isAdminOrLibrarian();
+        return true;
     }
 
     /**
