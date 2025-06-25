@@ -8,22 +8,32 @@ use Illuminate\Auth\Access\Response;
 
 class PublisherPolicy
 {
+    public function before(?User $user, string $ability): bool|null
+    {
+        // Admin users can perform any action.
+        if ($user && $user->isAdmin()) {
+            return true;
+        }
+        return null;
+    }
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(?User $user): bool
     {
         // Customers, Librarians, and Admins can view the list.
-        return $user->isClient() || $user->isAdminOrLibrarian();
+        //return $user->isClient() || $user->isAdminOrLibrarian();
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Publisher $publisher): bool
+    public function view(?User $user, Publisher $publisher): bool
     {
         // Customers, Librarians, and Admins can view a specific item.
-        return $user->isClient() || $user->isAdminOrLibrarian();
+        //return $user->isClient() || $user->isAdminOrLibrarian();
+        return true;
     }
 
     /**

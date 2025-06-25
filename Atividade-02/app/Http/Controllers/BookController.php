@@ -15,15 +15,13 @@ class BookController extends Controller
     // Proteja o construtor para ações gerais
     public function __construct()
     {
-        $this->middleware('auth'); // Garante que o usuário esteja logado
+        $this->middleware('auth')->only(['createWithId', 'createWithSelect', 'storeWithSelect', 'edit', 'store', 'update', 'destroy', 'updateCoverImage']); // Garante que o usuário esteja logado
     }
 
     public function index()
     {
        /*  $books = Book::all();
         return view('books.create-id', compact('books')); */
-        $this->authorize('viewAny', Book::class); // Ou Gate::allows('viewAny', Book::class)
-
         $books = Book::with('author')->paginate(20);
         return view('books.index', compact('books'));
     }
@@ -89,8 +87,6 @@ class BookController extends Controller
 
     public function show(Book $book)
     {
-        $this->authorize('view', $book);
-
         $book->load(['author', 'category', 'publisher']);
         $users = User::all();
         return view('books.show', compact('book', 'users'));
@@ -137,7 +133,7 @@ class BookController extends Controller
 
     public function updateCoverImage(Request $request, Book $book){
         $this->authorize('update', $book);
-        
+
         $request->validate([
         'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',]);
 

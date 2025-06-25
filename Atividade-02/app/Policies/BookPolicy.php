@@ -13,7 +13,8 @@ class BookPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->isClient() || $user->isAdminOrLibrarian();
+        //return $user->isClient() || $user->isAdminOrLibrarian();
+        return true;
     }
 
     /**
@@ -21,7 +22,8 @@ class BookPolicy
      */
     public function view(User $user, Book $book): bool
     {
-        return $user->isClient() || $user->isAdminOrLibrarian();
+        //return $user->isClient() || $user->isAdminOrLibrarian();
+        return true;
     }
 
     /**
