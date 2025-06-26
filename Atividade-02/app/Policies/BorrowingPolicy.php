@@ -8,12 +8,27 @@ use Illuminate\Auth\Access\Response;
 
 class BorrowingPolicy
 {
+    public function before(User $user, $ability): bool|null
+    {
+        // If the user is an admin or librarian, allow all actions
+        if ($user->isAdminOrLibrarian()) {
+            return true;
+        }
+
+        // If the user is a client, restrict access to view actions only
+        if ($user->isClient() && in_array($ability, ['view', 'viewAny'])) {
+            return true;
+        }
+
+        // For all other cases, deny access
+        return false;
+    }
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +36,7 @@ class BorrowingPolicy
      */
     public function view(User $user, Borrowing $borrowing): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +44,7 @@ class BorrowingPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->isAdminOrLibrarian();
     }
 
     /**
@@ -37,7 +52,7 @@ class BorrowingPolicy
      */
     public function update(User $user, Borrowing $borrowing): bool
     {
-        return false;
+        return $user->isAdminOrLibrarian();
     }
 
     /**
@@ -45,7 +60,7 @@ class BorrowingPolicy
      */
     public function delete(User $user, Borrowing $borrowing): bool
     {
-        return false;
+        return $user->isAdminOrLibrarian();
     }
 
     /**
@@ -53,7 +68,7 @@ class BorrowingPolicy
      */
     public function restore(User $user, Borrowing $borrowing): bool
     {
-        return false;
+        return $user->isAdminOrLibrarian();
     }
 
     /**
