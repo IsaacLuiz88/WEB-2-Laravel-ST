@@ -3,9 +3,11 @@
 <div class="container">
     <h1 class="my-4">Lista de Categorias</h1>
 
+    @can('create', App\Models\Category::class)
     <a href="{{ route('categories.create') }}" class="btn btn-success mb-3">
         <i class="bi bi-plus"></i> Adicionar Categoria
     </a>
+    @endcan
 
     @if(session('success'))
         <div class="alert alert-success">

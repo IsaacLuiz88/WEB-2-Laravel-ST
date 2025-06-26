@@ -19,7 +19,8 @@ class BorrowingFactory extends Factory
             'user_id' => User::factory(), //Create a new user for each borrowing or use an existing one
             'book_id' => Book::inRandomOrder()->first()->id, // Get a random book from the database
             'borrowed_at' => $this->faker->dateTimeBetween('-1 month', 'now'), //Date when the book was borrowed
-            'returned_at' => $this->faker->dateTimeBetween('now', '+1 month'), //Date when the book will be returned
+            //'returned_at' => $this->faker->dateTimeBetween('now', '+1 month'), //Date when the book will be returned
+            'returned_at' => null, // Set to null to indicate the book has not been returned yet
         ];
 
     }

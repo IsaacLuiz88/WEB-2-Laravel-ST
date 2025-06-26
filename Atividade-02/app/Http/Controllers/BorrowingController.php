@@ -33,10 +33,15 @@ class BorrowingController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
+        if($book->isBorrowed()) {
+            return redirect()->route('books.show', $book->id)->withErrors('This book is already borrowed.');
+        }
+
         $borrowing = Borrowing::create([
             'user_id' => $request->input('user_id'),
             'book_id' => $book->id,
             'borrowed_at' => now(),
+            'returned_at' => null,
         ]);
 
         return redirect()->route('books.show', $borrowing->book_id)->with('success', 'Borrowing created successfully.');
@@ -44,6 +49,9 @@ class BorrowingController extends Controller
 
     public function returnBook(Borrowing $borrowing)
     {
+        if($borrowing->returned_at !== null) {
+            return redirect()->back()->withErrors('This book has already been returned.');
+        }
         $borrowing->update([
             'returned_at' => now(),
         ]);

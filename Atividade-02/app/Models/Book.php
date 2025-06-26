@@ -31,4 +31,18 @@ class Book extends Model
         ->withPivot('id', 'borrowed_at', 'returned_at')
         ->withTimestamps();
     }
+
+    public function isBorrowed(): bool
+    {
+        // Busca na tabela pivô 'borrowings' por um registro onde:
+        // 1. O 'book_id' seja o ID deste livro
+        // 2. A coluna 'returned_at' seja NULL (indicando empréstimo em aberto)
+        return $this->users()->wherePivotNull('returned_at')->exists();
+    }
+
+    public function currentBorrower(){
+        return $this->hasMany(Borrowing::class)->whereNull('returned_at')
+            ->latest()
+            ->first();
+    }
 }

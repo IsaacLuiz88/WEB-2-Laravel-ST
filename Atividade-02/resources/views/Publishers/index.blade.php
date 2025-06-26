@@ -4,9 +4,11 @@
 <div class="container">
     <h1 class="my-4">Lista de Editoras</h1>
 
+    @can('create', App\Models\Publisher::class)
     <a href="{{ route('publishers.create') }}" class="btn btn-success mb-3">
         <i class="bi bi-plus"></i> Adicionar Editora
     </a>
+    @endcan
 
     @if(session('success'))
         <div class="alert alert-success">

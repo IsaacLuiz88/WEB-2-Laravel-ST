@@ -8,10 +8,12 @@ use App\Policies\UserPolicy;
 use App\Models\Book;
 use App\Policies\BookPolicy;
 use App\Models\Author;
+use App\Models\Borrowing;
 use App\Policies\AuthorPolicy;
 use App\Models\Category;
 use App\Policies\CategoryPolicy;
 use App\Models\Publisher;
+use App\Policies\BorrowingPolicy;
 use App\Policies\PublisherPolicy;
 
 class AuthServiceProvider extends ServiceProvider
@@ -27,6 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         Author::class => AuthorPolicy::class,
         Category::class => CategoryPolicy::class,
         Publisher::class => PublisherPolicy::class,
+        Borrowing::class => BorrowingPolicy::class,
     ];
 
     /**

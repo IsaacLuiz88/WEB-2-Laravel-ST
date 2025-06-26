@@ -4,10 +4,12 @@
 <div class="container">
     <h1 class="my-4">Lista de Autores</h1>
 
+    @can('create', App\Models\Author::class)
     <a href="{{ route('authors.create') }}" class="btn btn-success mb-3">
         <i class="bi bi-plus"></i> Adicionar Autor
     </a>
-
+    @endcan
+    
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
