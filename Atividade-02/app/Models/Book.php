@@ -40,7 +40,7 @@ class Book extends Model
         return $this->users()->wherePivotNull('returned_at')->exists();
     }
 
-    public function currentBorrower(){
+    public function currentBorrowing(){
         return $this->hasMany(Borrowing::class)->whereNull('returned_at')
             ->latest()
             ->first();

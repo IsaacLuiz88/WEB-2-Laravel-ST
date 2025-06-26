@@ -143,7 +143,7 @@
                                     @endif
                                 <td>
                                     @if(is_null($user->pivot->returned_at))
-                                        @can('update', Borrowing::find($user->pivot->id)) {{-- Verifica se o usuário pode 'update' este empréstimo --}}
+                                        @can('update', \App\Models\Borrowing::find($user->pivot->id)) {{-- Verifica se o usuário pode 'update' este empréstimo --}}
                                             <form action="{{ route('borrowings.return', $user->pivot->id) }}" method="POST">
                                                 @csrf
                                                 @method('PATCH')
