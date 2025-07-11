@@ -37,3 +37,8 @@ Route::put('/books/{book}/cover', [BookController::class, 'updateCover'])->name(
 
 Route::get('users/{user}/edit-role', [UserController::class, 'editRole'])->name('users.edit_role');
 Route::put('users/{user}/update-role', [UserController::class, 'updateRole'])->name('users.update_role');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/users/debits', [UserController::class, 'listDebtors'])->name('users.debit_list');
+    Route::patch('/users/{user}/clear-debit', [UserController::class, 'clearDebit'])->name('users.clear_debit');
+});

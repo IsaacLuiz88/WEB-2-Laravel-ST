@@ -49,6 +49,15 @@
                             <li class="nav-item">
                                 <a class="nav-link text-white" href="{{ route('users.index') }}">Usuários</a>
                             </li>
+                            <li>
+                                @auth
+                                    @if(Auth::user()->isBibliotecarioOrAdmin())
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ route('users.debit_list') }}">Gerenciar Multas</a>
+                                        </li>
+                                    @endif
+                                @endauth
+                            </li>
                         </ul>
                     </ul>
 

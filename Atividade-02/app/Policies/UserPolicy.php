@@ -13,6 +13,21 @@ class UserPolicy
         }
         return null;
     }
+
+    public function viewDebits(User $user): bool
+    {
+        return $user->isAdminOrLibrarian();
+    }
+
+    public function clearDebit(User $authUser, User $targetUser): bool
+    {
+        if (!$authUser->isAdminOrLibrarian()) {
+            return false;
+        }
+
+        return true; // Se o bibliotecário/admin pode zerar o próprio débito também
+    }
+
     /**
      * Determine whether the user can view any models.
      */
