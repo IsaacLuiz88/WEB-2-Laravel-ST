@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Book;
 use App\Models\Borrowing;
+use Illuminate\Support\Facades\Auth;
 
 class BorrowingController extends Controller
 {
+    const Borrowing_limit = 5;
+
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show']);
@@ -16,7 +19,7 @@ class BorrowingController extends Controller
         $this->middleware('can:update,borrowing')->only(['returnBook']);
         $this->middleware('can:view,user')->only(['userBorrowings']);
     }
-    
+
     public function index()
     {
         //
@@ -33,8 +36,22 @@ class BorrowingController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
-        if($book->isBorrowed()) {
+        if(!$book){
+            return redirect()->back()->with('Error', 'Book not found.');
+        }
+        $selectedUser = User::find($request->input('user_id'));
+        if(!$selectedUser){
+            return redirect()->back()->with('Error', 'User not found.');
+        }
+
+        if ($book->isBorrowed()) {
             return redirect()->route('books.show', $book->id)->withErrors('This book is already borrowed.');
+        }
+
+        $borrowedBooksCount = $selectedUser->getBorrowedBooksCount();
+
+        if($borrowedBooksCount >= self::Borrowing_limit) {
+            return redirect()->route('books.show', $book->id)->withErrors('User has reached the borrowing limit of ' . self::Borrowing_limit . ' books.');
         }
 
         $borrowing = Borrowing::create([
@@ -49,7 +66,7 @@ class BorrowingController extends Controller
 
     public function returnBook(Borrowing $borrowing)
     {
-        if($borrowing->returned_at !== null) {
+        if ($borrowing->returned_at !== null) {
             return redirect()->back()->withErrors('This book has already been returned.');
         }
         $borrowing->update([
@@ -59,7 +76,8 @@ class BorrowingController extends Controller
         return redirect()->route('books.show', $borrowing->book_id)->with('success', 'Book returned successfully.');
     }
 
-    public function userBorrowings(User $user) {
+    public function userBorrowings(User $user)
+    {
         $borrowings = $user->books()->withPivot('borrowed_at', 'returned_at')->get();
         return view('users.borrowings', compact('user', 'borrowings'));
     }
