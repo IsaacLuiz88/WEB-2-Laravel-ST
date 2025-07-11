@@ -35,17 +35,24 @@ class BorrowingController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
         ]);
+        $selectedUser = User::find($request->input('user_id'));
 
         if(!$book){
             return redirect()->back()->with('Error', 'Book not found.');
         }
-        $selectedUser = User::find($request->input('user_id'));
         if(!$selectedUser){
             return redirect()->back()->with('Error', 'User not found.');
         }
 
         if ($book->isBorrowed()) {
             return redirect()->route('books.show', $book->id)->withErrors('This book is already borrowed.');
+        }
+        if($selectedUser->hasPendingDebit()) {
+            return redirect()->back()->with('Error', 'User ' . $selectedUser->name . ' has a pending debit of (R$ ' . number_format($selectedUser->debit, 2, ',', '.') . ') and cannot borrow new books.');
+        }
+
+        if($selectedUser->BorrowedBooksCount() >= self::Borrowing_limit) {
+            return redirect()->back()->with('Error', 'User ' . $selectedUser->name . ' has reached the borrowing limit of ' . self::Borrowing_limit . ' books limit simultaneously.');
         }
 
         $borrowedBooksCount = $selectedUser->BorrowedBooksCount();
@@ -69,9 +76,20 @@ class BorrowingController extends Controller
         if ($borrowing->returned_at !== null) {
             return redirect()->back()->withErrors('This book has already been returned.');
         }
+
+        $fineAmount = $borrowing->calculateFine();
+
         $borrowing->update([
             'returned_at' => now(),
         ]);
+
+        if($fineAmount>0){
+            $user = $borrowing->user;
+            $user->debit += $fineAmount;
+            $user->save();
+
+            return redirect()->route('books.show', $borrowing->book_id)->with('success', 'Book returned successfully. A fine of R$ ' . number_format($fineAmount, 2, ',', '.') . ' has been added to the user\'s debit.');
+        }
 
         return redirect()->route('books.show', $borrowing->book_id)->with('success', 'Book returned successfully.');
     }
