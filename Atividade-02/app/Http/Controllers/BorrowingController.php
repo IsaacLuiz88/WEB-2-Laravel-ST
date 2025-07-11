@@ -48,7 +48,7 @@ class BorrowingController extends Controller
             return redirect()->route('books.show', $book->id)->withErrors('This book is already borrowed.');
         }
 
-        $borrowedBooksCount = $selectedUser->getBorrowedBooksCount();
+        $borrowedBooksCount = $selectedUser->BorrowedBooksCount();
 
         if($borrowedBooksCount >= self::Borrowing_limit) {
             return redirect()->route('books.show', $book->id)->withErrors('User has reached the borrowing limit of ' . self::Borrowing_limit . ' books.');

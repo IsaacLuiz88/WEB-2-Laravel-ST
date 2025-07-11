@@ -72,4 +72,9 @@ class User extends Authenticatable
     {
         return $this->isAdmin() || $this->isLibrarian();
     }
+
+    public function BorrowedBooksCount(): int
+    {
+        return $this->books()->wherePivot('returned_at', null)->count();
+    }
 }
