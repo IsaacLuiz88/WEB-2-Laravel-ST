@@ -11,6 +11,13 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('can:viewAny,App\Models\User')->only('index');
+        $this->middleware('can:create,App\Models\User')->only(['create', 'store']);
+        $this->middleware('can:update,user')->only(['edit', 'update']);
+        $this->middleware('can:delete,user')->only('destroy');
+        $this->middleware('can:updateRole,user')->only('update');
+        $this->middleware('can:viewDebits,App\Models\User')->only(['listDebtors', 'clearDebit']);
+        $this->middleware('can:clearDebit,user')->only('clearDebit');
     }
 
     public function index()
@@ -70,5 +77,25 @@ class UserController extends Controller
         $user->update(['role' => $request->role]);
 
         return redirect()->route('users.index')->with('success', 'User role updated successfully.');
+    }
+
+    public function listDebtors()
+    {
+        $this->authorize('viewDebits', User::class);
+
+        $debtors = User::where('debit', '>', 0)->orderBy('debit', 'desc')->get();
+        return view('users.debit_list', compact('debtors'));
+    }
+
+    public function clearDebit(User $user)
+    {
+        $this->authorize('clearDebit', $user);
+
+        if ($user->debit <= 0) {
+            return redirect()->back()->with('error', 'Este usuário não possui débitos pendentes.');
+        }
+
+        $user->update(['debit' => 0]);
+        return redirect()->back()->with('success', 'Débito do usuário ' . $user->name . ' zerado com sucesso!');
     }
 }
