@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'debit',
     ];
 
     public function books(){
@@ -50,6 +51,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'debit' => 'decimal:2',
         ];
     }
 
@@ -76,5 +78,10 @@ class User extends Authenticatable
     public function BorrowedBooksCount(): int
     {
         return $this->books()->wherePivot('returned_at', null)->count();
+    }
+
+    public function hasPendingDebit(): bool
+    {
+        return $this->debit > 0;
     }
 }
