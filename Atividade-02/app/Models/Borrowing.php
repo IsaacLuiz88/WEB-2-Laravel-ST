@@ -32,16 +32,24 @@ class Borrowing extends Model
 
     public function daysLate(): int
     {
-        if ($this->returned_at == null) {
-            return 0;
+        if ($this->returned_at === null) {
+            // Calcula a data de vencimento a partir da data de empréstimo
+            $dueDate = $this->borrowed_at->addDays(self::returnLimitDays);
+            $now = Carbon::now();
+
+            if ($now->lessThanOrEqualTo($dueDate)) {
+                return 0;
+            }
+
+            // Se a data atual é depois da data de vencimento, calcula os dias de atraso
+            return $now->diffInDays($dueDate);
         }
 
-        $dueDate = $this->borrowed_at->copy()->addDays(self::returnLimitDays);
-
+        // Se o livro já foi devolvido, usa a data de devolução para calcular o atraso
+        $dueDate = $this->borrowed_at->addDays(self::returnLimitDays);
         if ($this->returned_at->lessThanOrEqualTo($dueDate)) {
             return 0;
         }
-
         return $this->returned_at->diffInDays($dueDate);
     }
 

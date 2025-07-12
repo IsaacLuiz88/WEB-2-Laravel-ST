@@ -33,8 +33,6 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        // Customers, Librarians, and Admins can view the list.
-        //return $user->isAdminOrLibrarian();
         return true;
     }
 

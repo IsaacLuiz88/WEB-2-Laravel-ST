@@ -51,7 +51,7 @@
                             </li>
                             <li>
                                 @auth
-                                    @if(Auth::user()->isBibliotecarioOrAdmin())
+                                    @if(Auth::user()->isAdminOrLibrarian())
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{ route('users.debit_list') }}">Gerenciar Multas</a>
                                         </li>

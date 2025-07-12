@@ -93,6 +93,11 @@
                             <p class="mb-0">
                                 Emprestado por: **{{ $currentBorrowing->user->name ?? 'Usuário Desconhecido' }}**
                                 em **{{ $currentBorrowing->borrowed_at->format('d/m/Y H:i') }}**
+                                @if($currentBorrowing->daysLate() > 0)
+                                    <span class="badge bg-danger ms-2">Atrasado: {{ $currentBorrowing->daysLate() }} dias</span>
+                                @else
+                                    <span class="badge bg-success ms-2">Em dia</span>
+                                @endif
                             </p>
                             {{-- Botão para marcar como devolvido, visível apenas para bibliotecário/admin --}}
                             @can('update', $currentBorrowing) {{-- Verifica se o usuário pode 'update' este empréstimo (para devolver) --}}
@@ -124,23 +129,45 @@
                             <th>Usuário</th>
                             <th>Data de Empréstimo</th>
                             <th>Data de Devolução</th>
+                            <th>Status de Atraso</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($book->users as $user)
+                            @php
+                                // Como $book->users é um many-to-many com pivot, $user->pivot é o modelo Borrowing
+                                $borrowing = $user->pivot;
+                                $daysLate = $borrowing->daysLate();
+                            @endphp
                             <tr>
                                 <td>
                                     <a href="{{ route('users.show', $user->id) }}">
                                         {{ $user->name }}
                                     </a>
                                 </td>
-                                <td>{{ \Carbon\Carbon::parse($user->pivot->borrowed_at)->format('d/m/Y H:i') }}</td>
-                                <td>@if($user->pivot->returned_at)
-                                    {{ \Carbon\Carbon::parse($user->pivot->returned_at)->format('d/m/Y H:i') }}
+                                </td>
+                                <td>{{ $borrowing->borrowed_at->format('d/m/Y H:i') }}</td>
+                                <td>
+                                    @if($borrowing->returned_at)
+                                        {{ $borrowing->returned_at->format('d/m/Y H:i') }}
                                     @else
-                                    <span class="text-muted">Não devolvido</span>
+                                        Em Aberto
                                     @endif
+                                </td>
+                                {{-- AQUI: Adiciona a lógica para exibir o status de atraso --}}
+                                <td>
+                                    @if($daysLate > 0)
+                                        <span class="badge bg-danger">
+                                            Atrasado: {{ $daysLate }} dia{{ $daysLate > 1 ? 's' : '' }}
+                                            @if($borrowing->returned_at !== null)
+                                                (Multa: R$ {{ number_format($borrowing->calculateFine(), 2, ',', '.') }})
+                                            @endif
+                                        </span>
+                                    @else
+                                        <span class="badge bg-success">Em dia</span>
+                                    @endif
+                                </td>
                                 <td>
                                     @if(is_null($user->pivot->returned_at))
                                         @can('update', \App\Models\Borrowing::find($user->pivot->id)) {{-- Verifica se o usuário pode 'update' este empréstimo --}}

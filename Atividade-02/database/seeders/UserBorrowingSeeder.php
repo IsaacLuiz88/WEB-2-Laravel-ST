@@ -13,7 +13,7 @@ class UserBorrowingSeeder extends Seeder
     public function run()
     {
         User::factory(10)->create()->each(function ($user) {
-            $numberOfBorrowings = rand(1, 5);
+            $numberOfBorrowings = rand(0, 5);
             for ($i = 0; $i < $numberOfBorrowings; $i++) {
                 $book = Book::whereDoesntHave('users', function ($query) {
                                 $query->whereNull('returned_at');

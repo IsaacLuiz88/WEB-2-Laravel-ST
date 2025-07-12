@@ -17,7 +17,7 @@ class BorrowingFactory extends Factory
 
     public function definition(): array
     {
-    $borrowedAt = $this->faker->dateTimeBetween('-2 months', 'now'); // Pega data de empréstimo até 2 meses atrás
+        $borrowedAt = $this->faker->dateTimeBetween('-2 months', '-10 days'); // Pega data de empréstimo até 2 meses atrás
         $returnedAt = null;
 
         // 50% de chance de o livro estar devolvido, 50% em aberto
@@ -43,7 +43,7 @@ class BorrowingFactory extends Factory
     // Estado para criar um empréstimo em aberto
     public function inOpen()
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'returned_at' => null,
         ]);
     }
@@ -71,7 +71,6 @@ class BorrowingFactory extends Factory
             ];
         });
     }
-
 }
     /*public function definition(){
         return [
