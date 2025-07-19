@@ -32,34 +32,22 @@ class Borrowing extends Pivot
     const FINE_PER_DAY = 0.50;
 
     public function getDaysLate(): int
-    {
-        // Calcula a data de vencimento (dueDate)
-        $dueDate = $this->borrowed_at->copy()->addDays(self::RETURN_DAYS_LIMIT);
+{
+    $dueDate = $this->borrowed_at->copy()->addDays(self::RETURN_DAYS_LIMIT);
 
-        $comparisonDate = $this->returned_at ?? Carbon::now();
+    $comparisonDate = $this->returned_at ?? Carbon::now();
 
-        $dueDateStartOfDay = $dueDate->startOfDay();
-        $comparisonDateStartOfDay = $comparisonDate->startOfDay();
-
-        // Se a data de comparação é anterior ou no mesmo dia do vencimento, não há atraso.
-        if ($comparisonDateStartOfDay->lessThanOrEqualTo($dueDateStartOfDay)) {
-            return 0;
-        }
-
-        // Se chegamos aqui, significa que a data de comparação é após a data de vencimento (considerando apenas o dia).
-        // Agora, calculamos a diferença em dias inteiros.
-        $daysOverdue = $comparisonDateStartOfDay->diffInDays($dueDateStartOfDay);
-
-        // Esta é a parte importante:
-        // Se a data de comparação (mesmo que com startOfDay) é estritamente depois da data de vencimento
-        // E diffInDays retornou 0 (o que pode acontecer se a diferença for, por exemplo, 23 horas e 59 minutos)
-        // Então, consideramos que há pelo menos 1 dia de atraso, pois o prazo já foi excedido.
-        if ($daysOverdue === 0 && $comparisonDate->isAfter($dueDate)) {
-             return 1;
-        }
-
-        return $daysOverdue;
+    if ($comparisonDate->lessThanOrEqualTo($dueDate)) {
+        return 0;
     }
+
+    $totalHoursLate = $comparisonDate->diffInHours($dueDate, false);
+    $totalHoursLate = abs($totalHoursLate);
+    $daysOverdue = ceil($totalHoursLate / 24);
+
+    return (int) $daysOverdue;
+}
+
 
     public function calculateFine(): float
     {

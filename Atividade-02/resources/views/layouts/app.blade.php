@@ -53,7 +53,7 @@
                                 @auth
                                     @if(Auth::user()->isAdminOrLibrarian())
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('users.debit_list') }}">Gerenciar Multas</a>
+                                            <a class="nav-link text-white" href="{{ route('users.debit_list') }}">Gerenciar Multas</a>
                                         </li>
                                     @endif
                                 @endauth
