@@ -45,7 +45,7 @@ class BorrowingController extends Controller
         }
 
         if ($book->isBorrowed()) {
-            return redirect()->route('books.show', $book->id)->withErrors('This book is already borrowed.');
+            return redirect()->route('books.show', $book->id)->with('Error', 'This book is already borrowed.');
         }
         if($selectedUser->hasPendingDebit()) {
             return redirect()->back()->with('Error', 'User ' . $selectedUser->name . ' has a pending debit of (R$ ' . number_format($selectedUser->debit, 2, ',', '.') . ') and cannot borrow new books.');
@@ -58,7 +58,7 @@ class BorrowingController extends Controller
         $borrowedBooksCount = $selectedUser->BorrowedBooksCount();
 
         if($borrowedBooksCount >= self::Borrowing_limit) {
-            return redirect()->route('books.show', $book->id)->withErrors('User has reached the borrowing limit of ' . self::Borrowing_limit . ' books.');
+            return redirect()->route('books.show', $book->id)->with('Error', 'User has reached the borrowing limit of ' . self::Borrowing_limit . ' books.');
         }
 
         $borrowing = Borrowing::create([

@@ -93,8 +93,8 @@
                             <p class="mb-0">
                                 Emprestado por: **{{ $currentBorrowing->user->name ?? 'Usuário Desconhecido' }}**
                                 em **{{ $currentBorrowing->borrowed_at->format('d/m/Y H:i') }}**
-                                @if($currentBorrowing->daysLate() > 0)
-                                    <span class="badge bg-danger ms-2">Atrasado: {{ $currentBorrowing->daysLate() }} dias</span>
+                                @if($currentBorrowing->getDaysLate() > 0)
+                                    <span class="badge bg-danger ms-2">Atrasado: {{ $currentBorrowing->getDaysLate() }} dias</span>
                                 @else
                                     <span class="badge bg-success ms-2">Em dia</span>
                                 @endif
@@ -138,7 +138,7 @@
                             @php
                                 // Como $book->users é um many-to-many com pivot, $user->pivot é o modelo Borrowing
                                 $borrowing = $user->pivot;
-                                $daysLate = $borrowing->daysLate();
+                                $getDaysLate = $borrowing->getDaysLate();
                             @endphp
                             <tr>
                                 <td>
@@ -155,11 +155,11 @@
                                         Em Aberto
                                     @endif
                                 </td>
-                                {{-- AQUI: Adiciona a lógica para exibir o status de atraso --}}
+                                {{-- AQUI:lógica para exibir o status de atraso --}}
                                 <td>
-                                    @if($daysLate > 0)
+                                    @if($getDaysLate > 0)
                                         <span class="badge bg-danger">
-                                            Atrasado: {{ $daysLate }} dia{{ $daysLate > 1 ? 's' : '' }}
+                                            Atrasado: {{ $getDaysLate }} dia{{ $getDaysLate > 1 ? 's' : '' }}
                                             @if($borrowing->returned_at !== null)
                                                 (Multa: R$ {{ number_format($borrowing->calculateFine(), 2, ',', '.') }})
                                             @endif

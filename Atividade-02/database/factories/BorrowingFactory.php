@@ -8,22 +8,19 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Borrowing>
- */
 class BorrowingFactory extends Factory
 {
     protected $model = Borrowing::class;
 
     public function definition(): array
     {
-        $borrowedAt = $this->faker->dateTimeBetween('-2 months', '-10 days'); // Pega data de empréstimo até 2 meses atrás
+        $borrowedAt = $this->faker->dateTimeBetween('-1 months', '-10 days'); // Pega data de empréstimo até 1 mês atrás
         $returnedAt = null;
 
         // 50% de chance de o livro estar devolvido, 50% em aberto
         if ($this->faker->boolean(50)) {
             // Se devolvido, calcula uma data de retorno que pode ser atrasada
-            $dueDate = Carbon::parse($borrowedAt)->addDays(Borrowing::returnLimitDays);
+            $dueDate = Carbon::parse($borrowedAt)->addDays(Borrowing::RETURN_DAYS_LIMIT);
             // 60% de chance de ser devolvido no prazo ou antes, 40% de chance de ser atrasado
             if ($this->faker->boolean(60)) {
                 $returnedAt = $this->faker->dateTimeBetween($borrowedAt, $dueDate->toDateTimeString());
@@ -53,19 +50,31 @@ class BorrowingFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             $borrowedAt = Carbon::parse($attributes['borrowed_at']);
-            $dueDate = $borrowedAt->addDays(Borrowing::returnLimitDays);
+            $dueDate = $borrowedAt->addDays(Borrowing::RETURN_DAYS_LIMIT);
             return [
                 'returned_at' => $this->faker->dateTimeBetween($dueDate->addDay()->toDateTimeString(), 'now'),
             ];
         });
     }
+/*
+    // Estado para criar um empréstimo devolvido no prazo
+    public function returnedOnTime()
+    {
+        return $this->state(function (array $attributes) {
+            $borrowedAt = Carbon::parse($attributes['borrowed_at']);
+            $dueDate = $borrowedAt->addDays(Borrowing::RETURN_DAYS_LIMIT);
+            return [
+                'returned_at' => $this->faker->dateTimeBetween($dueDate->addDay()->toDateTimeString(), 'now'),
+            ];
+        });
+    }*/
 
     // Estado para criar um empréstimo devolvido no prazo
     public function returnedOnTime()
     {
         return $this->state(function (array $attributes) {
             $borrowedAt = Carbon::parse($attributes['borrowed_at']);
-            $dueDate = $borrowedAt->addDays(Borrowing::returnLimitDays);
+            $dueDate = $borrowedAt->addDays(Borrowing::RETURN_DAYS_LIMIT);
             return [
                 'returned_at' => $this->faker->dateTimeBetween($borrowedAt->toDateTimeString(), $dueDate->toDateTimeString()),
             ];
