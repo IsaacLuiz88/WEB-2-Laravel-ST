@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This option defines the default authentication "guard" and password
-    | reset "broker" for your application. You may change these values
+    | reset "broker" for your ''plication. You may change these values
     | as required, but they're a perfect start for most applications.
     |
     */
@@ -38,6 +38,10 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'api' => [
+            'driver' => 'sanctum',
             'provider' => 'users',
         ],
     ],
