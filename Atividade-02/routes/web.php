@@ -17,7 +17,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// --- ROTAS ESPECÍFICAS RELACIONADAS A USUÁRIOS ---
+// --- ROTAS PROTEGIDAS POR AUTENTICAÇÃO (Auth) ---
 Route::middleware(['auth'])->group(function () {
     // Rota para listar usuários com débitos
     Route::get('/users/debits', [UserController::class, 'listDebtors'])->name('users.debit_list');
@@ -28,7 +28,14 @@ Route::middleware(['auth'])->group(function () {
     Route::put('users/{user}/update-role', [UserController::class, 'updateRole'])->name('users.update_role');
     // Rota para visualização de empréstimos de um usuário específico
     Route::get('/users/{user}/borrowings', [BorrowingController::class, 'userBorrowings'])->name('users.borrowings');
+
+    // Rotas de Empréstimos (Borrowing)
+    Route::post('/borrow/{book}/borrow', [BorrowingController::class, 'store'])->name('books.borrow');
+    Route::patch('/borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook'])->name('borrowings.return');
+    // Rota de atualização de capa de livro
+    Route::put('/books/{book}/cover', [BookController::class, 'updateCover'])->name('books.updateCover');
 });
+
 
 // --- ROTAS DE RECURSO E OUTRAS ROTAS MAIS GENÉRICAS ---
 Route::resource('categories', CategoryController::class);
@@ -47,11 +54,3 @@ Route::resource('books', BookController::class)->except(['create', 'store']);
 // Rotas RESTful para usuários (excluindo create, store, destroy, pois algumas são customizadas ou você as excluiu intencionalmente)
 // Esta rota resource agora vem DEPOIS das rotas específicas de users.
 Route::resource('users', UserController::class)->except(['create', 'store', 'destroy']);
-
-
-// Rotas de Empréstimos (Borrowing)
-Route::post('/borrow/{book}/borrow', [BorrowingController::class, 'store'])->name('books.borrow');
-Route::patch('/borrowings/{borrowing}/return', [BorrowingController::class, 'returnBook'])->name('borrowings.return');
-
-// Rota de atualização de capa de livro
-Route::put('/books/{book}/cover', [BookController::class, 'updateCover'])->name('books.updateCover');

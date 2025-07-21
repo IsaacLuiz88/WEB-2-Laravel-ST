@@ -47,9 +47,13 @@
                                 <a class="nav-link text-white" href="{{ route('publishers.index') }}">Editoras</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" href="{{ route('users.index') }}">Usuários</a>
+                                @auth
+                                    @if(Auth::user()->isAdminOrLibrarian())
+                                        <a class="nav-link text-white" href="{{ route('users.index') }}">Usuários</a>
+                                    @endif
+                                @endauth
                             </li>
-                            <li>
+                            <li class="nav-item">
                                 @auth
                                     @if(Auth::user()->isAdminOrLibrarian())
                                         <li class="nav-item">

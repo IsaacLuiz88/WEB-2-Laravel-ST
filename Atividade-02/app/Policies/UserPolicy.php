@@ -41,8 +41,6 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        // Customers, Librarians, and Admins can view a specific item.
-        //return $user->isAdminOrLibrarian();
         return true;
     }
 
